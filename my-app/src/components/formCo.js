@@ -2,7 +2,24 @@ import React, {useState, useEffect} from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import PersonCard from "./PersonCard"
+import PersonCard from "./PersonCard";
+import styled from "styled-components";
+
+
+const CardDiv = styled.div `
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-flow:column wrap;
+    border:1px solid black;
+    margin:1% 0;
+    
+   
+`;
+const CardP = styled.p`
+
+`; 
+
 
 
 const FormCo = ({values, errors, touched, status}) =>{
@@ -15,7 +32,7 @@ const FormCo = ({values, errors, touched, status}) =>{
     },[status]);
     return (
         <div>
-            <Form>
+            <Form className="flex-it">
                 <Field type="text" name="name" placeholder="Name"></Field>
                 {touched.name && errors.name && (
                     <p>{errors.name}</p>
@@ -24,36 +41,46 @@ const FormCo = ({values, errors, touched, status}) =>{
                 {touched.email && errors.email && (
                     <p>{errors.email}</p>
                 )}
+                <Field type="password" name="pass" placeholder="Password"></Field>
+                {touched.pass && errors.pass && (
+                    <p>{errors.pass}</p>
+                )}
                 <label>
                     Terms
                     <Field type="checkbox" name="terms" checked={values.terms} ></Field>
                 </label>
                 
-                <button>Sign Up!</button>
+                <button type="submit">Sign Up!</button>
             </Form>
         {/* <PersonCard people = {people}></PersonCard> */}
         {people.map(person =>(
-            <div key="">
-                <p>Name: {person.name}</p>
-                <p>Email: {person.email}</p>
-                <p>TOS: {person.terms}</p>
-            </div>
+            
+            <CardDiv key={person.id}>
+                <CardP>Name: {person.name}</CardP>
+                <CardP>Email: {person.email}</CardP>
+                <CardP>Password: {person.pass}</CardP>
+            </CardDiv>
+            
         ))}
         </div>
     );
 };
 
 const FormikFormCo = withFormik({
-    mapPropsToValues({name, email, terms}) {
+    mapPropsToValues({name, email, terms, pass}) {
         return {
             name: name || "",
             email: email || "",
-            terms: terms || false
+            terms: terms || false,
+            pass: pass || ""
         };
     },
     validationSchema: Yup.object().shape({
         name: Yup.string().required("You must include name"),
-        email: Yup.string().required("You must include an email")
+        email: Yup.string().required("You must include an email"),
+        pass: Yup.string().required("You must have a pass"),
+        terms: Yup.boolean().required("You must accept")
+
     }),
     handleSubmit(values, {setStatus, resetForm}){
         axios 
