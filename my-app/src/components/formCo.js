@@ -42,6 +42,16 @@ const FormikFormCo = withFormik({
         name: Yup.string().required("You must include name"),
         email: Yup.string().required("You must include an email")
     }),
+    handleSubmit(values, {setStatus}){
+        axios 
+        .post("https://reqres.in/api/users", values)
+        .then(res =>{
+            console.log(res);
+            console.log("help",values)
+            setStatus(res.data);
+        })
+        .catch(err => console.log(err.res));
+    },
 })(FormCo)
 
 
