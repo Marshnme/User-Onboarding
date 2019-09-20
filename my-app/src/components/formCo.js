@@ -76,9 +76,16 @@ const FormikFormCo = withFormik({
         };
     },
     validationSchema: Yup.object().shape({
-        name: Yup.string().required("You must include name"),
-        email: Yup.string().required("You must include an email"),
-        pass: Yup.string().required("You must have a pass"),
+        name: Yup.string()
+        .required("You must include name")
+        .min(1, "You need a longer name!"),
+        email: Yup.string()
+        .email("invalid email")
+        .required("You must include an email")
+        .max(20, "to long of an email"),
+        pass: Yup.string()
+        .min(4,"to short bud")
+        .required("You must have a pass"),
         terms: Yup.boolean().required("You must accept")
 
     }),
